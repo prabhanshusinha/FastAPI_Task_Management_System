@@ -19,3 +19,13 @@ def get_all_tasks(db= Depends(get_db)):
 @task_routes.get("/one_task/{task_id}")
 def get_one_task(task_id:int,db=Depends(get_db)):
     return contoller.get_one_task(task_id,db)
+
+
+@task_routes.put("/update_task/{task_id}")
+def update_task(body:TaskSchema,task_id:int,db=Depends(get_db)):
+    return contoller.update_task(body,task_id,db)
+
+
+@task_routes.delete("/delete_task/{task_id}")
+def delete_task(task_id:int,db=Depends(get_db)):
+    return contoller.delete_task(task_id,db)

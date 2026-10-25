@@ -24,3 +24,30 @@ def get_one_task(task_id:int,db:Session):
         raise HTTPException(status_code=404,detail="Task Id is Incorrect")
        
     return {"status":"Task Fetched Successfully","data":one_task}
+
+
+def update_task(body:TaskSchema,task_id:int,db:Session):
+    one_task = db.query(TaskModel).get(task_id)
+    if not one_task:
+        raise HTTPException(status_code=404,detail="Task Id is Incorrect")
+
+    body = body.model_dump()
+    for field,value in body.items():
+        setattr(one_task,field,value)
+
+    db.add(one_task)
+    db.commit()
+    db.refresh(one_task)
+
+    return {"status":"Task Updated Successfully","data":one_task}
+
+
+def delete_task(task_id:int,db:Session):
+    one_task = db.query(TaskModel).get(task_id)
+    if not one_task:
+        raise HTTPException(status_code=404,detail="Task Id is Incorrect")
+
+    db.delete(one_task)
+    db.commit()
+
+    return {"status":"Task Deleted Successfully"}
