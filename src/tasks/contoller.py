@@ -11,7 +11,7 @@ def create_task(body:TaskSchema,db:Session):
     db.commit()
     db.refresh(new_task)
 
-    return {"status":"Task Created Sucessfully...", "data" :new_task}
+    return new_task
 
 
 def get_tasks(db:Session):
@@ -50,4 +50,4 @@ def delete_task(task_id:int,db:Session):
     db.delete(one_task)
     db.commit()
 
-    return {"status":"Task Deleted Successfully"}
+    return None
