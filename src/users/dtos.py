@@ -5,4 +5,11 @@ class UserSchema(BaseModel):
     username : str
     password : str
     email : str
-    mobile_no :int
+    mobile_no :str
+
+class UserResponseSchema(BaseModel):
+    name : str
+    username : str
+    email : str
+    mobile_no :str
+    id : int
