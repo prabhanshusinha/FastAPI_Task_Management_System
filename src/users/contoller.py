@@ -3,8 +3,13 @@ from sqlalchemy.orm import Session
 from src.users.model import UserModel
 from fastapi import HTTPException,status
 from pwdlib import PasswordHash
+import jwt
+from src.utils.settings import settings
+from datetime import datetime, timedelta
 
 password_hash = PasswordHash.recommended()
+
+
 
 def get_password_hash(password):
     return password_hash.hash(password)
@@ -47,6 +52,8 @@ def login_user(body: LoginSchema, db:Session):
     if not verify_password(body.password, user.hash_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You Entered Wrong Password !!")
 
-    
-    
-    return "Login Done"
+    exp_time= datetime.now() + timedelta(minutes=settings.EXP_TIME)
+
+    token= jwt.encode({"_id":user.id, "exp":exp_time}, settings.SECRET_KEY, settings.ALGORITHM)
+
+    return {"token":token}
