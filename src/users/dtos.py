@@ -13,3 +13,8 @@ class UserResponseSchema(BaseModel):
     email : str
     mobile_no :str
     id : int
+
+
+class LoginSchema(BaseModel):
+    username : str
+    password : str
