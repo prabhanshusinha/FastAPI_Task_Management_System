@@ -27,10 +27,13 @@ def get_one_task(task_id:int,db:Session):
     return one_task
 
 
-def update_task(body:TaskSchema,task_id:int,db:Session):
+def update_task(body:TaskSchema,task_id:int,db:Session, user:UserModel):
     one_task = db.query(TaskModel).get(task_id)
     if not one_task:
         raise HTTPException(status_code=404,detail="Task Id is Incorrect")
+
+    if one_task.user_id != user.id:
+        raise HTTPException(status_code=401,detail="You are not allowed to update this task !!")
 
     body = body.model_dump()
     for field,value in body.items():
@@ -43,10 +46,13 @@ def update_task(body:TaskSchema,task_id:int,db:Session):
     return one_task
 
 
-def delete_task(task_id:int,db:Session):
+def delete_task(task_id:int,db:Session, user:UserModel):
     one_task = db.query(TaskModel).get(task_id)
     if not one_task:
         raise HTTPException(status_code=404,detail="Task Id is Incorrect")
+
+    if one_task.user_id != user.id:
+        raise HTTPException(status_code=401,detail="You are not allowed to delete this task !!")
 
     db.delete(one_task)
     db.commit()
